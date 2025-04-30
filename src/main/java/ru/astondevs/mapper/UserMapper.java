@@ -6,7 +6,7 @@ import ru.astondevs.entity.UserEntity;
 public class UserMapper {
 
     // Преобразование UserEntity -> UserDto
-    public static UserDto toDto(UserEntity entity) {
+    public UserDto toDto(UserEntity entity) {
         return new UserDto(
                 entity.getId(),
                 entity.getName(),
@@ -17,7 +17,7 @@ public class UserMapper {
     }
 
     // Преобразование UserDto -> UserEntity
-    public static UserEntity toEntity(UserDto dto) {
+    public UserEntity toEntity(UserDto dto) {
         UserEntity entity = new UserEntity();
         entity.setId(dto.getId());
         entity.setName(dto.getName());

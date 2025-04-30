@@ -11,11 +11,18 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 public class UserDao {
+    private final Session session;
+    private final UserMapper mapper;
+
+    public UserDao(Session session, UserMapper mapper) {
+        this.session = session;
+        this.mapper = mapper;
+    }
 
     // Создание
     public void create(UserDto userDto) {
-        UserEntity entity = UserMapper.toEntity(userDto);
-        Session session = HibernateUtil.getSessionFactory().openSession();
+        UserEntity entity = mapper.toEntity(userDto);
+        //Session session = HibernateUtil.getSessionFactory().openSession();
         Transaction transaction = null;
 
         try {
@@ -28,21 +35,21 @@ public class UserDao {
             }
             e.printStackTrace();
         } finally {
-            session.close();
+            //session.close();
         }
     }
 
     // Чтение по ID
     public UserDto read(int id) {
-        Session session = HibernateUtil.getSessionFactory().openSession();
+        //Session session = HibernateUtil.getSessionFactory().openSession();
         UserEntity entity = session.get(UserEntity.class, id);
-        session.close();
-        return entity != null ? UserMapper.toDto(entity) : null;
+        //session.close();
+        return entity != null ? mapper.toDto(entity) : null;
     }
 
     // Обновление
     public void update(UserDto userDto) {
-        UserEntity entity = UserMapper.toEntity(userDto);
+        UserEntity entity = mapper.toEntity(userDto);
         Session session = HibernateUtil.getSessionFactory().openSession();
         Transaction transaction = null;
 
@@ -56,17 +63,17 @@ public class UserDao {
             }
             e.printStackTrace();
         } finally {
-            session.close();
+            //session.close();
         }
     }
 
     // Удаление
     public void delete(int id) {
-        Session session = HibernateUtil.getSessionFactory().openSession();
-        Transaction transaction = null;
+        //Session session = HibernateUtil.getSessionFactory().openSession();
+        Transaction transaction = session.beginTransaction();
 
         try {
-            transaction = session.beginTransaction();
+
             UserEntity entity = session.get(UserEntity.class, id);
             if (entity != null) {
                 session.delete(entity);
@@ -78,7 +85,7 @@ public class UserDao {
             }
             e.printStackTrace();
         } finally {
-            session.close();
+            //session.close();
         }
     }
 

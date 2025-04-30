@@ -1,6 +1,7 @@
 package ru.astondevs.mapper;
 
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import ru.astondevs.dto.UserDto;
 import ru.astondevs.entity.UserEntity;
 
@@ -8,18 +9,24 @@ import java.time.LocalDateTime;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-public class UserMapperTest {
+class UserMapperTest {
+    UserMapper underTest;
+
+    @BeforeEach
+    void beforeEach() {
+        underTest = new UserMapper();
+    }
 
     @Test
-    public void toEntity() {
+    void toEntity() {
         UserEntity entity = new UserEntity();
         entity.setId(1);
-        entity.setName("test");
+        entity.setName("test_user");
         entity.setEmail("test@test.com");
-        entity.setAge(25);
+        entity.setAge(32);
         entity.setCreatedAt(LocalDateTime.now());
 
-        UserDto dto = UserMapper.toDto(entity);
+        UserDto dto = underTest.toDto(entity);
 
         assertNotNull(dto);;
         assertAll(
@@ -31,11 +38,11 @@ public class UserMapperTest {
         );
     }
     @Test
-    public void toDto() {
+    void toDto() {
         LocalDateTime now = LocalDateTime.now();
         UserDto dto = new UserDto(5, "Test", "test@test.ru", 32, now);
 
-        UserEntity entity = UserMapper.toEntity(dto);
+        UserEntity entity = underTest.toEntity(dto);
 
         assertNotNull(entity);
         assertAll(
