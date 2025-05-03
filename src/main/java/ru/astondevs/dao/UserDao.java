@@ -27,7 +27,7 @@ public class UserDao {
 
         try {
             transaction = session.beginTransaction();
-            session.save(entity);
+            session.persist(entity);
             transaction.commit();
         } catch (Exception e) {
             if (transaction != null) {
@@ -50,12 +50,12 @@ public class UserDao {
     // Обновление
     public void update(UserDto userDto) {
         UserEntity entity = mapper.toEntity(userDto);
-        Session session = HibernateUtil.getSessionFactory().openSession();
+        //Session session = HibernateUtil.getSessionFactory().openSession();
         Transaction transaction = null;
 
         try {
             transaction = session.beginTransaction();
-            session.update(entity);
+            session.merge(entity);
             transaction.commit();
         } catch (Exception e) {
             if (transaction != null) {
@@ -70,10 +70,10 @@ public class UserDao {
     // Удаление
     public void delete(int id) {
         //Session session = HibernateUtil.getSessionFactory().openSession();
-        Transaction transaction = session.beginTransaction();
+        Transaction transaction = null;
 
         try {
-
+            transaction = session.beginTransaction();
             UserEntity entity = session.get(UserEntity.class, id);
             if (entity != null) {
                 session.delete(entity);
@@ -91,11 +91,11 @@ public class UserDao {
 
     // Получение всех
     public List<UserDto> getAll() {
-        Session session = HibernateUtil.getSessionFactory().openSession();
+        //Session session = HibernateUtil.getSessionFactory().openSession();
         List<UserEntity> entities = session.createQuery("FROM UserEntity", UserEntity.class).list();
         session.close();
         return entities.stream()
                 .map(UserMapper::toDto)
-                .collect(Collectors.toList());
+                .toList();
     }
 }
