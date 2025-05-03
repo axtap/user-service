@@ -10,7 +10,8 @@ public class UserDto {
     private LocalDateTime createdAt;
 
     // Конструктор без параметров
-    public UserDto() {}
+    public UserDto() {
+    }
 
     // Конструктор с параметрами
     public UserDto(int id, String name, String email, int age, LocalDateTime createdAt) {

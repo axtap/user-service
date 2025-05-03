@@ -44,7 +44,20 @@ public class UserDao {
         //Session session = HibernateUtil.getSessionFactory().openSession();
         UserEntity entity = session.get(UserEntity.class, id);
         //session.close();
-        return entity != null ? mapper.toDto(entity) : null;
+        Transaction transaction = null;
+        try {
+            transaction = session.beginTransaction();
+            UserEntity userEntity = session.get(UserEntity.class, id);
+            transaction.commit();
+            return entity != null ? mapper.toDto(entity) : null;
+        } catch (Exception e) {
+            if (transaction != null) {
+                transaction.rollback();
+            }
+            e.printStackTrace();
+            return null;
+        }
+
     }
 
     // Обновление
@@ -93,9 +106,9 @@ public class UserDao {
     public List<UserDto> getAll() {
         //Session session = HibernateUtil.getSessionFactory().openSession();
         List<UserEntity> entities = session.createQuery("FROM UserEntity", UserEntity.class).list();
-        session.close();
+        //session.close();
         return entities.stream()
-                .map(UserMapper::toDto)
+                .map(mapper::toDto)
                 .toList();
     }
 }
